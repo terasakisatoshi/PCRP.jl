@@ -1,0 +1,13 @@
+name = "PCRP"
+uuid = "fbb6ef38-ed7f-4611-b371-46269e5f47de"
+authors = ["Satoshi Terasaki <terasakisatoshi.math@gmail.com> and contributors"]
+version = "0.1.0"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+julia = "1"
+
+[targets]
+test = ["Test"]

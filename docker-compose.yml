@@ -1,0 +1,45 @@
+version: '3'
+services:
+  jupyter:
+    image: pcrpjl
+    container_name: pcrpjl-jupyter
+    volumes:
+      - ./:/workspace/PCRP.jl
+    working_dir: /workspace/PCRP.jl
+    ports:
+      - "8888:8888"
+    command: jupyter notebook --notebook-dir /workspace/PCRP.jl --ip=0.0.0.0 --allow-root
+  lab:
+    image: pcrpjl
+    container_name: pcrpjl-lab
+    volumes:
+      - ./:/workspace/PCRP.jl
+    working_dir: /workspace/PCRP.jl
+    ports:
+      - "8888:8888"
+    command: jupyter lab --notebook-dir /workspace/PCRP.jl --ip=0.0.0.0 --allow-root
+  julia:
+    image: pcrpjl
+    container_name: pcrpjl-julia
+    volumes:
+      - ./:/workspace/PCRP.jl
+    working_dir: /workspace/PCRP.jl
+    command: julia --project=/workspace/PCRP.jl
+  web:
+    image: pcrpjl
+    container_name: pcrpjl-packagedocs
+    volumes:
+      - ./:/workspace/PCRP.jl
+    working_dir: /workspace/PCRP.jl
+    ports:
+      - "8000:8000"
+    command: make web
+  pluto:
+    image: pcrpjl
+    container_name: pcrpjl-pluto
+    volumes:
+      - ./:/workspace/PCRP.jl
+    working_dir: /workspace/PCRP.jl
+    ports:
+      - "1234:1234"
+    command: julia -e 'import Pluto; Pluto.run(host="0.0.0.0", port=1234)'
