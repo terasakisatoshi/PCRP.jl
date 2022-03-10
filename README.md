@@ -3,3 +3,12 @@
 # Flux.jl + PyCallChainRules.jl
 
 https://user-images.githubusercontent.com/16760547/157697417-997134de-6d2b-4d8b-b4a7-d028350100a2.png
+
+# Usage
+
+```console
+$ https://github.com/terasakisatoshi/PCRP.jl.git
+$ cd PCRP
+$ make
+$ docker-compose up lab
+```
