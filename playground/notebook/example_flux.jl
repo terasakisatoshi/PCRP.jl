@@ -35,6 +35,7 @@ ytest = Flux.onehotbatch(ytest, 0:9)   # (10000,) -> (10, 10000)
 train_loader = DataLoader((xtrain, ytrain), batchsize=128, shuffle=true)
 test_loader = DataLoader((xtest, ytest),  batchsize=128);
 
+# +
 struct LeNet
     cnn_layer
     mlp_layer
@@ -63,7 +64,7 @@ function create_model(imsize::Tuple{Int,Int,Int}, nclasses::Int)
 end
 
 (net::LeNet)(x) = x |> net.cnn_layer |> flatten |> net.mlp_layer
-
+# -
 
 model = create_model((28, 28, 1), 10) |> f32
 ps = Flux.params(model);

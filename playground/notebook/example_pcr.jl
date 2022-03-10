@@ -38,6 +38,7 @@ ytest = Flux.onehotbatch(ytest, 0:9)   # (10000,) -> (10, 10000)
 train_loader = DataLoader((xtrain, ytrain), batchsize=128, shuffle=true)
 test_loader = DataLoader((xtest, ytest),  batchsize=128);
 
+#=
 # https://github.com/FluxML/model-zoo/blob/master/vision/conv_mnist/conv_mnist.jl
 # を一部改変
 function create_model(imsize::Tuple{Int,Int,Int}, nclasses::Int)
@@ -58,6 +59,7 @@ function create_model(imsize::Tuple{Int,Int,Int}, nclasses::Int)
         TorchModuleWrapper(torch.nn.Linear(84,nclasses)),
     )
 end
+=#
 
 # +
 struct LeNet
@@ -72,6 +74,27 @@ Flux.@functor LeNet (cnn_layer, mlp_layer) # cnn_layer と mlp_layer が学習�
 # -
 
 
+function create_model(imsize::Tuple{Int,Int,Int}, nclasses::Int)
+    W, H, inC = imsize
+    out_conv_size = (W ÷ 4 - 3, H ÷ 4 - 3, 16)
+    cnn_layer = Chain(
+        TorchModuleWrapper(torch.nn.Conv2d(1, 6, (5,5))),
+        x->Flux.relu.(x),
+        MaxPool((2,2)),
+        TorchModuleWrapper(torch.nn.Conv2d(6, 16, (5,5))),
+        x->Flux.relu.(x),
+        MaxPool((2,2))
+    )
+    mlp_layer = Chain(
+        TorchModuleWrapper(torch.nn.Linear(prod(out_conv_size), 120)),
+        x->Flux.relu.(x),
+        TorchModuleWrapper(torch.nn.Linear(120, 84)),
+        x->Flux.relu.(x),
+        TorchModuleWrapper(torch.nn.Linear(84,nclasses)),
+    )
+    LeNet(cnn_layer, mlp_layer, nclasses)
+end
+
 model = create_model((28, 28, 1), 10) |> f32
 ps = Flux.params(model);
 opt = Descent(0.05)
@@ -79,16 +102,20 @@ loss(ŷ, y) = Flux.Losses.logitcrossentropy(ŷ, y)
 
 for e in 1:args.epochs
     @showprogress for (x, y) in train_loader
-        gs = Flux.gradient(model) do m
+        gs, = Flux.gradient(model) do m
             ŷ = m(x)
             loss(ŷ, y)
         end
         cnt = 1
-        for lay in gs[1].layers
-            isnothing(lay) && continue
-            for Δ in lay.params
-                ps[cnt] .-= Flux.Optimise.apply!(opt, ps, Δ)
-                cnt += 1
+        for g in gs
+            isnothing(g) && continue
+            for lay in g.layers
+                isnothing(lay) && continue
+                for Δ in lay.params
+                    #@show Δ
+                    ps[cnt] .-= Flux.Optimise.apply!(opt, ps, Δ)
+                    cnt += 1
+                end
             end
         end
     end
