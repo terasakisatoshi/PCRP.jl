@@ -3,11 +3,23 @@ uuid = "fbb6ef38-ed7f-4611-b371-46269e5f47de"
 authors = ["Satoshi Terasaki <terasakisatoshi.math@gmail.com> and contributors"]
 version = "0.1.0"
 
-[extras]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+[deps]
+DLPack = "53c2dc0f-f7d5-43fd-8906-6c0220547083"
+Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
+ImageInTerminal = "d8c32880-2388-543b-8c61-d9f865259254"
+Images = "916415d5-f1e6-5110-898d-aaa5f9f070e0"
+MLDatasets = "eb30cadb-4394-5ae3-aed4-317e484a6458"
+ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+PyCallChainRules = "b12ccfe2-7326-416f-9f4f-cd3183bd9fe8"
+Zygote = "e88e6eb3-aa80-5325-afca-941959d7151f"
 
 [compat]
+PyCallChainRules = "=0.3.0"
 julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
 test = ["Test"]
