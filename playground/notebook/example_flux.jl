@@ -68,7 +68,7 @@ end
 
 model = create_model((28, 28, 1), 10) |> f32
 ps = Flux.params(model);
-opt = Descent(args.η)
+opt = Descent(0.05)
 loss(ŷ, y) = Flux.Losses.logitcrossentropy(ŷ, y)
 
 for e in 1:args.epochs
