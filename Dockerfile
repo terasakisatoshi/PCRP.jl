@@ -137,7 +137,7 @@ ENV PATH=${HOME}/.local/bin:${PATH}
 
 RUN pip3 install jax numpy && \
     pip3 install --pre torch -f https://download.pytorch.org/whl/nightly/cpu/torch_nightly.html --upgrade && \
-    pip3 install "git+https://github.com/pytorch/functorch.git@94be44d9a28dcd8341a91b9f7395d2241e6a3a47" && \
+    pip3 install functorch && \
     pip3 install jax\["cpu"\] -f https://storage.googleapis.com/jax-releases/jax_releases.html
 
 ENV JULIA_PROJECT "@."
